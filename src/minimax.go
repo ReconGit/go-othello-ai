@@ -33,13 +33,13 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	}
 	// increase depth based on round
 	if round >= 50 {
-		depth = depth + 10
+		depth += 10
 	} else if round > 40 {
-		depth = depth + 2
+		depth += 2
 	} else if round > 30 {
-		depth = depth + 1
+		depth += 1
 	}
-	
+
 	my_turn := game.state
 	best_move := possible_moves[0]
 	best_value := math.MinInt32
@@ -75,34 +75,27 @@ func minimax(game Othello, my_turn State, depth int, alpha int, beta int) int {
 	} else if state == DRAW {
 		return 0
 	}
+	// if depth is 0, return heuristic board evaluation
 	if depth == 0 {
 		return evaluate_board(game)
 	}
+
 	possible_moves := game.GetValidMoves()
-	var best_value int
+	best_value := math.MaxInt32
 	if state == my_turn {
 		best_value = math.MinInt32
-	} else {
-		best_value = math.MaxInt32
 	}
 	for _, move := range possible_moves {
 		simulation := clone.Clone(game)
 		simulation.MakeMove(move)
 		value := minimax(simulation, my_turn, depth-1, alpha, beta)
+		// alpha-beta pruning
 		if state == my_turn {
-			if value > best_value {
-				best_value = value
-			}
-			if value > alpha {
-				alpha = value
-			}
+			best_value = int(math.Max(float64(value), float64(best_value)))
+			alpha = int(math.Max(float64(value), float64(alpha)))
 		} else {
-			if value < best_value {
-				best_value = value
-			}
-			if value < beta {
-				beta = value
-			}
+			best_value = int(math.Min(float64(value), float64(best_value)))
+			beta = int(math.Min(float64(value), float64(beta)))
 		}
 		if alpha >= beta {
 			break
@@ -118,19 +111,19 @@ func evaluate_board(game Othello) int {
 			cell := game.board[y][x]
 			if cell == BLACK {
 				if game.state == BLACK_TURN {
-					score = score + REWARDS[y][x]
+					score += REWARDS[y][x]
 				} else {
-					score = score - REWARDS[y][x]
+					score -= REWARDS[y][x]
 				}
 			} else if cell == WHITE {
 				if game.state == WHITE_TURN {
-					score = score + REWARDS[y][x]
+					score += REWARDS[y][x]
 				} else {
-					score = score - REWARDS[y][x]
+					score -= REWARDS[y][x]
 				}
 			}
 		}
-	}		
+	}
 	return score
 }
 

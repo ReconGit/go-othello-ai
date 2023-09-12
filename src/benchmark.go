@@ -8,7 +8,7 @@ import (
 
 const (
 	GAMES           = 10
-	MINIMAX_DEPTH   = 2
+	MINIMAX_DEPTH   = 1
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"
@@ -47,7 +47,7 @@ func RunBenchmarks() {
 	// benchmarkGame(MctsMove, MinimaxMove, MCTS_ITERATIONS, MINIMAX_DEPTH)
 
 	end_time := time.Since(start_time).Seconds()
-	fmt.Printf("\nTotal elapsed time: %.2f\n", end_time)
+	fmt.Printf("%s\nTotal elapsed time: %.2f\n%s", MAGENTA_ANSI, end_time, RESET_ANSI)
 }
 
 func benchmarkGame(
