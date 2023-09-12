@@ -19,26 +19,26 @@ func RunBenchmarks() {
 	fmt.Printf("%sRunning benchmarks...%s\n", MAGENTA_ANSI, RESET_ANSI)
 	start_time := time.Now()
 
-	fmt.Printf("%s\nRandom vs Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmarkGame(random_move, random_move, 0, 0)
+	// fmt.Printf("%s\nRandom vs Random%s\n", BLUE_ANSI, RESET_ANSI)
+	// benchmarkGame(random_move, random_move, 0, 0)
 
-	fmt.Printf("%s\nBLACK Minimax vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmarkGame(MinimaxMove, random_move, MINIMAX_DEPTH, 0)
+	// fmt.Printf("%s\nBLACK Minimax vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
+	// benchmarkGame(MinimaxMove, random_move, MINIMAX_DEPTH, 0)
 
-	fmt.Printf("%s\nWHITE Minimax vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmarkGame(random_move, MinimaxMove, 0, MINIMAX_DEPTH)
+	// fmt.Printf("%s\nWHITE Minimax vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
+	// benchmarkGame(random_move, MinimaxMove, 0, MINIMAX_DEPTH)
 
-	fmt.Printf("%s\nMinimax vs Minimax%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmarkGame(MinimaxMove, MinimaxMove, MINIMAX_DEPTH, MINIMAX_DEPTH)
+	// fmt.Printf("%s\nMinimax vs Minimax%s\n", BLUE_ANSI, RESET_ANSI)
+	// benchmarkGame(MinimaxMove, MinimaxMove, MINIMAX_DEPTH, MINIMAX_DEPTH)
 
-	// fmt.Printf("%s\nBLACK MCTS vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
-	// benchmarkGame(MctsMove, random_move, MCTS_ITERATIONS, 0)
+	fmt.Printf("%s\nBLACK MCTS vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
+	benchmarkGame(MctsMove, random_move, MCTS_ITERATIONS, 0)
 
-	// fmt.Printf("%s\nWHITE MCTS vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
-	// benchmarkGame(random_move, MctsMove, 0, MCTS_ITERATIONS)
+	fmt.Printf("%s\nWHITE MCTS vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
+	benchmarkGame(random_move, MctsMove, 0, MCTS_ITERATIONS)
 
-	// fmt.Printf("%s\nMCTS vs MCTS%s\n", BLUE_ANSI, RESET_ANSI)
-	// benchmarkGame(MctsMove, MctsMove, MCTS_ITERATIONS, MCTS_ITERATIONS)
+	fmt.Printf("%s\nMCTS vs MCTS%s\n", BLUE_ANSI, RESET_ANSI)
+	benchmarkGame(MctsMove, MctsMove, MCTS_ITERATIONS, MCTS_ITERATIONS)
 
 	// fmt.Printf("%s\nBLACK Minimax vs WHITE MCTS%s\n", BLUE_ANSI, RESET_ANSI)
 	// benchmarkGame(MinimaxMove, MctsMove, MINIMAX_DEPTH, MCTS_ITERATIONS)
