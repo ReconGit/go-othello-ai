@@ -1,7 +1,8 @@
-package src
+package ai
 
 import (
-	"github.com/huandu/go-clone/generic"
+	"github.com/ReconGit/go-othello-ai/pkg/game"
+	"github.com/huandu/go-clone"
 	"math"
 	"math/rand"
 )
@@ -9,14 +10,14 @@ import (
 type Node struct {
 	parent     *Node
 	position   [2]int
-	turn       State
+	turn       game.State
 	unexplored [][2]int
 	children   []*Node
 	visits     int
 	wins       int
 }
 
-func new_node(parent *Node, position [2]int, turn State, unexplored [][2]int) *Node {
+func new_node(parent *Node, position [2]int, turn game.State, unexplored [][2]int) *Node {
 	return &Node{
 		parent:     parent,
 		position:   position,
@@ -31,9 +32,9 @@ func new_node(parent *Node, position [2]int, turn State, unexplored [][2]int) *N
 func (n *Node) select_child() *Node {
 	best_child_idx := 0
 	best_score := math.Inf(-1)
-	log_total := math.Log(2 * float64(n.visits))
+	ln_total := math.Log(2 * float64(n.visits))
 	for child_idx, child := range n.children {
-		score := float64(child.wins)/float64(child.visits) + math.Sqrt(log_total/float64(child.visits))
+		score := float64(child.wins)/float64(child.visits) + math.Sqrt(ln_total/float64(child.visits))
 		if score > best_score {
 			best_child_idx = child_idx
 			best_score = score
@@ -43,23 +44,22 @@ func (n *Node) select_child() *Node {
 }
 
 func (n *Node) get_most_visited_position() [2]int {
-	var most_visited *Node
+	most_visited_child_idx := 0
 	most_visits := 0
-	for _, child := range n.children {
+	for i, child := range n.children {
 		if child.visits > most_visits {
-			most_visited = child
+			most_visited_child_idx = i
 			most_visits = child.visits
 		}
 	}
-	return most_visited.position
+	return n.children[most_visited_child_idx].position
 }
 
-func MctsMove(game Othello, iterations int) [2]int {
-	root := new_node(nil, [2]int{}, game.state, game.GetValidMoves())
-	// for interations
+func MctsMove(othello game.Othello, iterations int) [2]int {
+	root := new_node(nil, [2]int{}, othello.State, othello.GetValidMoves())
 	for i := 0; i < iterations; i++ {
 		node := root
-		simulation := clone.Clone(game)
+		simulation := clone.Clone(othello).(game.Othello)
 		// SELECT
 		for len(node.unexplored) == 0 && len(node.children) > 0 {
 			node = node.select_child()
@@ -69,7 +69,7 @@ func MctsMove(game Othello, iterations int) [2]int {
 		if len(node.unexplored) > 0 {
 			rand_idx := rand.Intn(len(node.unexplored))
 			explored_move := node.unexplored[rand.Intn(len(node.unexplored))]
-			explored_turn := simulation.state
+			explored_turn := simulation.State
 			simulation.MakeMove(explored_move)
 			// remove explored move from unexplored and add child to the tree
 			node.unexplored = append(node.unexplored[:rand_idx], node.unexplored[rand_idx+1:]...)
@@ -78,16 +78,16 @@ func MctsMove(game Othello, iterations int) [2]int {
 			node = child
 		}
 		// SIMULATE
-		for simulation.state == BLACK_TURN || simulation.state == WHITE_TURN {
+		for simulation.State == game.BLACK_TURN || simulation.State == game.WHITE_TURN {
 			possible_moves := simulation.GetValidMoves()
 			simulation.MakeMove(possible_moves[rand.Intn(len(possible_moves))])
 		}
 		// BACKPROPAGATE
 		for node != nil {
 			node.visits++
-			if simulation.state == DRAW {
+			if simulation.State == game.DRAW {
 				// do nothing because draw is neutral
-			} else if (simulation.state == BLACK_WON) == (node.turn == BLACK_TURN) {
+			} else if (simulation.State == game.BLACK_WON) == (node.turn == game.BLACK_TURN) {
 				node.wins++
 			} else {
 				node.wins--
