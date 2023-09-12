@@ -1,9 +1,7 @@
-package ui
+package game
 
 import (
 	"fmt"
-	"github.com/ReconGit/go-othello-ai/pkg/ai"
-	"github.com/ReconGit/go-othello-ai/pkg/game"
 )
 
 const (
@@ -17,46 +15,44 @@ const (
 func PlayGame() {
 	fmt.Println("Welcome to Othello!")
 
-	// initialize othello
-	othello := game.NewOthello()
+	game := NewOthello()
 	round := 0
-	for othello.State == game.BLACK_TURN || othello.State == game.WHITE_TURN {
+	for game.State == BLACK_TURN || game.State == WHITE_TURN {
 		round++
 		fmt.Printf("\n%s      Round %d%s\n", GREEN_ANSI, round, RESET_ANSI)
-		print_board(othello.Board)
-		print_score(othello.BlackScore, othello.WhiteScore)
-		print_state(othello.State)
+		print_board(game.Board)
+		print_score(game.BlackScore, game.WhiteScore)
+		print_state(game.State)
 
-		// get move
 		var move [2]int
-		if othello.State == game.BLACK_TURN {
-			move = ai.MinimaxMove(othello, 1)
+		if game.State == BLACK_TURN {
+			move = MinimaxMove(game, 1)
 		} else {
-			move = ai.MctsMove(othello, 100)
+			move = MctsMove(game, 100)
 		}
 		fmt.Printf("      Move: %c%d\n", move[0]+65, move[1]+1)
-		othello.MakeMove(move)
+		game.MakeMove(move)
 	}
 	fmt.Println("\n     Game Over!")
-	print_board(othello.Board)
-	print_score(othello.BlackScore, othello.WhiteScore)
-	print_state(othello.State)
+	print_board(game.Board)
+	print_score(game.BlackScore, game.WhiteScore)
+	print_state(game.State)
 	fmt.Println()
 }
 
-func print_board(game_board [8][8]game.Cell) {
+func print_board(game_board [8][8]Cell) {
 	fmt.Println("   A B C D E F G H")
 	for y := 0; y < 8; y++ {
 		fmt.Printf("%d |", y+1)
 		for x := 0; x < 8; x++ {
 			switch game_board[x][y] {
-			case game.EMPTY:
+			case EMPTY:
 				fmt.Printf(" ")
-			case game.BLACK:
+			case BLACK:
 				fmt.Printf("%s●%s", BLACK_ANSI, RESET_ANSI)
-			case game.WHITE:
+			case WHITE:
 				fmt.Printf("%s●%s", WHITE_ANSI, RESET_ANSI)
-			case game.VALID:
+			case VALID:
 				fmt.Printf("%s*%s", YELLOW_ANSI, RESET_ANSI)
 			}
 			fmt.Printf("|")
@@ -69,17 +65,17 @@ func print_score(BlackScore, WhiteScore int) {
 	fmt.Printf("%sBlack: %d %s| White: %d\n", BLACK_ANSI, BlackScore, RESET_ANSI, WhiteScore)
 }
 
-func print_state(State game.State) {
+func print_state(State State) {
 	switch State {
-	case game.BLACK_TURN:
+	case BLACK_TURN:
 		fmt.Printf("%s     BLACK turn%s\n", BLACK_ANSI, RESET_ANSI)
-	case game.WHITE_TURN:
+	case WHITE_TURN:
 		fmt.Printf("%s     WHITE turn%s\n", WHITE_ANSI, RESET_ANSI)
-	case game.BLACK_WON:
+	case BLACK_WON:
 		fmt.Printf("%s     BLACK won%s\n", BLACK_ANSI, RESET_ANSI)
-	case game.WHITE_WON:
+	case WHITE_WON:
 		fmt.Printf("%s     WHITE won%s\n", WHITE_ANSI, RESET_ANSI)
-	case game.DRAW:
+	case DRAW:
 		fmt.Println("        DRAW")
 	}
 }

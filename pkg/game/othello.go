@@ -26,6 +26,7 @@ type Othello struct {
 	WhiteScore int
 }
 
+// NewOthello returns a new Othello game.
 func NewOthello() Othello {
 	// initialize board
 	board := [8][8]Cell{}
@@ -39,13 +40,14 @@ func NewOthello() Othello {
 	board[5][4] = VALID
 
 	return Othello{
-		Board:       board,
-		State:       BLACK_TURN,
+		Board:      board,
+		State:      BLACK_TURN,
 		BlackScore: 2,
 		WhiteScore: 2,
 	}
 }
 
+// MakeMove makes a move on the board.
 func (o *Othello) MakeMove(position [2]int) {
 	// sanity checks
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
@@ -66,6 +68,7 @@ func (o *Othello) MakeMove(position [2]int) {
 	o.update_state()
 }
 
+// GetValidMoves returns a list of positions that can be played.
 func (o *Othello) GetValidMoves() [][2]int {
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		return [][2]int{}

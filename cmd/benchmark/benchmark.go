@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/ReconGit/go-othello-ai/pkg/game"
-	"github.com/ReconGit/go-othello-ai/pkg/ai"
 	"fmt"
+	"github.com/ReconGit/go-othello-ai/pkg/game"
 	"math/rand"
 	"time"
 )
@@ -30,28 +29,28 @@ func run_benchmarks() {
 	benchmark_game(random_move, random_move, 0, 0)
 
 	fmt.Printf("%s\nBLACK Minimax vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MinimaxMove, random_move, MINIMAX_DEPTH, 0)
+	benchmark_game(game.MinimaxMove, random_move, MINIMAX_DEPTH, 0)
 
 	fmt.Printf("%s\nWHITE Minimax vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(random_move, ai.MinimaxMove, 0, MINIMAX_DEPTH)
+	benchmark_game(random_move, game.MinimaxMove, 0, MINIMAX_DEPTH)
 
 	fmt.Printf("%s\nMinimax vs Minimax%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MinimaxMove, ai.MinimaxMove, MINIMAX_DEPTH, MINIMAX_DEPTH)
+	benchmark_game(game.MinimaxMove, game.MinimaxMove, MINIMAX_DEPTH, MINIMAX_DEPTH)
 
 	fmt.Printf("%s\nBLACK MCTS vs WHITE Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MctsMove, random_move, MCTS_ITERATIONS, 0)
+	benchmark_game(game.MctsMove, random_move, MCTS_ITERATIONS, 0)
 
 	fmt.Printf("%s\nWHITE MCTS vs BLACK Random%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(random_move, ai.MctsMove, 0, MCTS_ITERATIONS)
+	benchmark_game(random_move, game.MctsMove, 0, MCTS_ITERATIONS)
 
 	fmt.Printf("%s\nMCTS vs MCTS%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MctsMove, ai.MctsMove, MCTS_ITERATIONS, MCTS_ITERATIONS)
+	benchmark_game(game.MctsMove, game.MctsMove, MCTS_ITERATIONS, MCTS_ITERATIONS)
 
 	fmt.Printf("%s\nBLACK Minimax vs WHITE MCTS%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MinimaxMove, ai.MctsMove, MINIMAX_DEPTH, MCTS_ITERATIONS)
+	benchmark_game(game.MinimaxMove, game.MctsMove, MINIMAX_DEPTH, MCTS_ITERATIONS)
 
 	fmt.Printf("%s\nBLACK MCTS vs WHITE Minimax%s\n", BLUE_ANSI, RESET_ANSI)
-	benchmark_game(ai.MctsMove, ai.MinimaxMove, MCTS_ITERATIONS, MINIMAX_DEPTH)
+	benchmark_game(game.MctsMove, game.MinimaxMove, MCTS_ITERATIONS, MINIMAX_DEPTH)
 
 	end_time := time.Since(start_time).Seconds()
 	fmt.Printf("%s\nTotal elapsed time: %.2f\n%s", MAGENTA_ANSI, end_time, RESET_ANSI)
