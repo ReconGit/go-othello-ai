@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	src.PlayGame()
+	src.RunBenchmarks()
 }

@@ -2,7 +2,6 @@ package src
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 const BLACK_ANSI = "\x1b[30m"
@@ -27,15 +26,14 @@ func PlayGame() {
 		// get move
 		var move [2]int
 		if game.state == BLACK_TURN {
-			move = random_move(game.board)
+			move = MinimaxMove(game, 1)
 		} else {
-			move = random_move(game.board)
+			move = MinimaxMove(game, 1)
 		}
-		//println!("      Move: {}{}", (position.0 as u8 + 65) as char, position.1 + 1);
 		fmt.Printf("      Move: %c%d\n", move[0]+65, move[1]+1)
 		game.MakeMove(move)
 	}
-	fmt.Println("\n     Game over!")
+	fmt.Println("\n     Game Over!")
 	print_board(game.board)
 	print_score(game.black_score, game.white_score)
 	print_state(game.state)
@@ -79,15 +77,5 @@ func print_state(state State) {
 		fmt.Printf("%s     WHITE won%s\n", WHITE_ANSI, RESET_ANSI)
 	case DRAW:
 		fmt.Println("        DRAW")
-	}
-}
-
-func random_move(game_board [8][8]Cell) [2]int {
-	for {
-		x := rand.Intn(8)
-		y := rand.Intn(8)
-		if game_board[x][y] == VALID {
-			return [2]int{x, y}
-		}
 	}
 }
