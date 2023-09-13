@@ -72,16 +72,16 @@ func new_node(parent *Node, position [2]int, turn State, unexplored [][2]int) *N
 	}
 }
 
-// select_child returns the child node with the highest UCT score
+// select_child returns the child node with the highest UCT value
 func (n *Node) select_child() *Node {
 	best_child_idx := 0
-	best_score := math.Inf(-1)
+	best_uct := math.Inf(-1)
 	ln_total := math.Log(2 * float64(n.visits))
 	for child_idx, child := range n.children {
-		score := float64(child.wins)/float64(child.visits) + math.Sqrt(ln_total/float64(child.visits))
-		if score > best_score {
+		uct := float64(child.wins)/float64(child.visits) + math.Sqrt(ln_total/float64(child.visits))
+		if uct > best_uct {
 			best_child_idx = child_idx
-			best_score = score
+			best_uct = uct
 		}
 	}
 	return n.children[best_child_idx]

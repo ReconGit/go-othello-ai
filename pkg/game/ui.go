@@ -9,6 +9,7 @@ const (
 	WHITE_ANSI  = "\x1b[37m"
 	YELLOW_ANSI = "\x1b[33m"
 	GREEN_ANSI  = "\x1b[32m"
+	RED_ANSI    = "\x1b[31m"
 	RESET_ANSI  = "\x1b[0m"
 )
 
@@ -24,14 +25,14 @@ func PlayGame() {
 		print_score(game.BlackScore, game.WhiteScore)
 		print_state(game.State)
 
-		var move [2]int
+		var position [2]int
 		if game.State == BLACK_TURN {
-			move = MinimaxMove(game, 1)
+			position = user_move(game)
 		} else {
-			move = MctsMove(game, 100)
+			position = MctsMove(game, 1000)
 		}
-		fmt.Printf("      Move: %c%d\n", move[0]+65, move[1]+1)
-		game.MakeMove(move)
+		fmt.Printf("      Move: %c%d\n", position[0]+65, position[1]+1)
+		game.MakeMove(position)
 	}
 	fmt.Println("\n     Game Over!")
 	print_board(game.Board)
@@ -40,12 +41,33 @@ func PlayGame() {
 	fmt.Println()
 }
 
+func user_move(game Othello) [2]int {
+	var input string
+	for {
+		fmt.Printf("Enter move (eg. A1): ")
+		_, err := fmt.Scanln(&input)
+		if err != nil || len(input) != 2 {
+			fmt.Printf("%sInvalid input.%s\n", RED_ANSI, RESET_ANSI)
+			continue
+		}
+		x := int(input[0]) - 65
+		y := int(input[1]) - 49
+		// if the move is in valid move list, return it
+		for _, move := range game.GetValidMoves() {
+			if move[0] == x && move[1] == y {
+				return [2]int{x, y}
+			}
+		}
+		fmt.Printf("%sInvalid move.%s\n", RED_ANSI, RESET_ANSI)
+	}
+}
+
 func print_board(game_board [8][8]Cell) {
 	fmt.Println("   A B C D E F G H")
 	for y := 0; y < 8; y++ {
 		fmt.Printf("%d |", y+1)
 		for x := 0; x < 8; x++ {
-			switch game_board[x][y] {
+			switch game_board[y][x] {
 			case EMPTY:
 				fmt.Printf(" ")
 			case BLACK:

@@ -49,20 +49,20 @@ func MinimaxMove(game Othello, depth int) [2]int {
 }
 
 func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
-	State := game.State
-	if State == BLACK_WON {
+	state := game.State
+	if state == BLACK_WON {
 		if my_turn == BLACK_TURN {
 			return 300
 		} else {
 			return -300
 		}
-	} else if State == WHITE_WON {
+	} else if state == WHITE_WON {
 		if my_turn == WHITE_TURN {
 			return 300
 		} else {
 			return -300
 		}
-	} else if State == DRAW {
+	} else if state == DRAW {
 		return 0
 	}
 	// if depth is 0, return heuristic Board evaluation
@@ -71,21 +71,23 @@ func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
 	}
 
 	possible_moves := game.GetValidMoves()
-	best_value := math.MaxInt32
-	if State == my_turn {
+	var best_value int
+	if state == my_turn {
 		best_value = math.MinInt32
+	} else {
+		best_value = math.MaxInt32
 	}
 	for _, move := range possible_moves {
 		simulation := clone.Clone(game)
 		simulation.MakeMove(move)
 		value := minimax(simulation, my_turn, depth-1, alpha, beta)
 		// alpha-beta pruning
-		if State == my_turn {
+		if state == my_turn {
 			best_value = max(best_value, value)
-			alpha = max(alpha, best_value)
+			alpha = max(best_value, alpha)
 		} else {
 			best_value = min(best_value, value)
-			beta = min(beta, best_value)
+			beta = min(best_value, beta)
 		}
 		if alpha >= beta {
 			break
@@ -140,16 +142,16 @@ func get_round(game_board [8][8]Cell) int {
 	return round
 }
 
-func min(x, y int) int {
-	if x < y {
-		return x
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-	return y
+	return b
 }
 
-func max(x, y int) int {
-	if x > y {
-		return x
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-	return y
+	return b
 }

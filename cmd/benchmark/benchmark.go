@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	GAMES           = 10
-	MINIMAX_DEPTH   = 1
+	GAMES           = 100
+	MINIMAX_DEPTH   = 2
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"
@@ -25,6 +25,7 @@ func run_benchmarks() {
 	fmt.Printf("%sRunning benchmarks...%s\n", MAGENTA_ANSI, RESET_ANSI)
 	start_time := time.Now()
 
+	//
 	fmt.Printf("%s\nRandom vs Random%s\n", BLUE_ANSI, RESET_ANSI)
 	benchmark_game(random_move, random_move, 0, 0)
 
@@ -51,6 +52,7 @@ func run_benchmarks() {
 
 	fmt.Printf("%s\nBLACK MCTS vs WHITE Minimax%s\n", BLUE_ANSI, RESET_ANSI)
 	benchmark_game(game.MctsMove, game.MinimaxMove, MCTS_ITERATIONS, MINIMAX_DEPTH)
+	//
 
 	end_time := time.Since(start_time).Seconds()
 	fmt.Printf("%s\nTotal elapsed time: %.2f\n%s", MAGENTA_ANSI, end_time, RESET_ANSI)

@@ -26,7 +26,7 @@ type Othello struct {
 	WhiteScore int
 }
 
-// NewOthello returns a new Othello game.
+// NewOthello returns a new Othello game
 func NewOthello() Othello {
 	// initialize board
 	board := [8][8]Cell{}
@@ -47,28 +47,30 @@ func NewOthello() Othello {
 	}
 }
 
-// MakeMove makes a move on the board.
+// MakeMove makes a move on the board
 func (o *Othello) MakeMove(position [2]int) {
 	// sanity checks
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		panic("Cannot make move because the game is over.")
 	}
-	if o.Board[position[0]][position[1]] != VALID {
+	if o.Board[position[1]][position[0]] != VALID {
 		panic("Position is not valid.")
 	}
 	// update board
-	reverse := BLACK
-	if o.State == WHITE_TURN {
+	var reverse Cell
+	if o.State == BLACK_TURN {
+		reverse = BLACK
+	} else {
 		reverse = WHITE
 	}
-	o.Board[position[0]][position[1]] = reverse
+	o.Board[position[1]][position[0]] = reverse
 	for _, cell := range o.flipped_cells(position) {
 		o.Board[cell[1]][cell[0]] = reverse
 	}
 	o.update_state()
 }
 
-// GetValidMoves returns a list of positions that can be played.
+// GetValidMoves returns a list of positions that can be played
 func (o *Othello) GetValidMoves() [][2]int {
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		return [][2]int{}
@@ -77,7 +79,7 @@ func (o *Othello) GetValidMoves() [][2]int {
 	for y := 0; y < 8; y++ {
 		for x := 0; x < 8; x++ {
 			if o.Board[y][x] == VALID {
-				valid_moves = append(valid_moves, [2]int{y, x})
+				valid_moves = append(valid_moves, [2]int{x, y})
 			}
 		}
 	}
@@ -158,19 +160,18 @@ func (o *Othello) update_valid_cells() {
 }
 
 func (o *Othello) flipped_cells(position [2]int) [][2]int {
-	player := BLACK
-	if o.State == WHITE_TURN {
-		player = WHITE
-	}
-	opponent := BLACK
-	if o.State == WHITE_TURN {
+	var player Cell
+	var opponent Cell
+	if o.State == BLACK_TURN {
+		player = BLACK
 		opponent = WHITE
+	} else {
+		player = WHITE
+		opponent = BLACK
 	}
 	flipped := [][2]int{}
-	x := position[0]
-	y := position[1]
-	for _, direction := range [][2]int{{0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}} {
-		flipped = append(flipped, o.flipped_cells_in_direction(x, y, direction[0], direction[1], player, opponent)...)
+	for _, direction := range [][2]int{{0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1}} {
+		flipped = append(flipped, o.flipped_cells_in_direction(position[0], position[1], direction[0], direction[1], player, opponent)...)
 	}
 	return flipped
 }
@@ -184,7 +185,7 @@ func (o *Othello) flipped_cells_in_direction(x, y, dx, dy int, player, opponent 
 		x += dx
 		y += dy
 	}
-	if !(x >= 0 && x < 8 && y >= 0 && y < 8) || o.Board[y][x] == player {
+	if !(x >= 0 && x < 8 && y >= 0 && y < 8) || o.Board[y][x] != player {
 		return [][2]int{}
 	}
 	return flipped
