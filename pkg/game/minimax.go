@@ -1,7 +1,7 @@
 package game
 
 import (
-	"github.com/huandu/go-clone/generic"
+	//"github.com/huandu/go-clone/generic"
 	"math"
 	"math/rand"
 )
@@ -34,7 +34,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	best_move := possible_moves[0]
 	best_value := math.MinInt32
 	for _, move := range possible_moves {
-		simulation := clone.Clone(game)
+		simulation := game.Copy()
 		simulation.MakeMove(move)
 		value := minimax(simulation, my_turn, depth-1, math.MinInt32, math.MaxInt32)
 		if value > best_value {
@@ -78,7 +78,7 @@ func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
 		best_value = math.MaxInt32
 	}
 	for _, move := range possible_moves {
-		simulation := clone.Clone(game)
+		simulation := game.Copy()
 		simulation.MakeMove(move)
 		value := minimax(simulation, my_turn, depth-1, alpha, beta)
 		// alpha-beta pruning

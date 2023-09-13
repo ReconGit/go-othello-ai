@@ -47,6 +47,22 @@ func NewOthello() Othello {
 	}
 }
 
+// Copy returns a copy of the game
+func (o *Othello) Copy() Othello {
+	board := [8][8]Cell{}
+	for y := 0; y < 8; y++ {
+		for x := 0; x < 8; x++ {
+			board[y][x] = o.Board[y][x]
+		}
+	}
+	return Othello{
+		Board:      board,
+		State:      o.State,
+		BlackScore: o.BlackScore,
+		WhiteScore: o.WhiteScore,
+	}
+}
+
 // MakeMove makes a move on the board
 func (o *Othello) MakeMove(position [2]int) {
 	// sanity checks
