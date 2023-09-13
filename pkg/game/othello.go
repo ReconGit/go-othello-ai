@@ -186,7 +186,8 @@ func (o *Othello) flipped_cells(position [2]int) [][2]int {
 		opponent = BLACK
 	}
 	flipped := [][2]int{}
-	for _, direction := range [][2]int{{0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1}} {
+	directions := [][2]int{{0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1}}
+	for _, direction := range directions {
 		flipped = append(flipped, o.flipped_cells_in_direction(position[0], position[1], direction[0], direction[1], player, opponent)...)
 	}
 	return flipped
