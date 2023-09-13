@@ -9,7 +9,7 @@ import (
 
 const (
 	GAMES           = 100
-	MINIMAX_DEPTH   = 2
+	MINIMAX_DEPTH   = 3
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"

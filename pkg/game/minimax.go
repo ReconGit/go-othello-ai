@@ -1,7 +1,6 @@
 package game
 
 import (
-	//"github.com/huandu/go-clone/generic"
 	"math"
 	"math/rand"
 )
