@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	GAMES           = 10
+	GAMES           = 100
 	MINIMAX_DEPTH   = 2
 	MCTS_ITERATIONS = 100
 

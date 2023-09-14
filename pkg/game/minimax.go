@@ -22,7 +22,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	}
 	// increase depth based on round
 	if round >= 50 {
-		depth += 10
+		depth += 10 // end game solver
 	} else if round > 40 {
 		depth += 2
 	} else if round > 30 {
@@ -31,62 +31,66 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	my_turn := game.State
 	best_move := possible_moves[0]
 	best_value := math.MinInt32
-	results := make(chan [2]int)
+	result_chan := make(chan [2]int)
 
 	for i, move := range possible_moves {
 		// parallelize each move in a goroutine to speed up the search
-		go func(move [2]int, index int) {
+		go func(move [2]int, move_idx int) {
 			simulation := game.Copy()
 			simulation.MakeMove(move)
-			result := minimax(simulation, my_turn, depth-1, math.MinInt32, math.MaxInt32)
-			results <- [2]int{result, index}
+			value := minimax(simulation, my_turn, depth-1, math.MinInt32, math.MaxInt32)
+			result_chan <- [2]int{value, move_idx}
 		}(move, i)
 	}
 	for i := 0; i < len(possible_moves); i++ {
-		result := <-results
+		result := <-result_chan
 		if result[0] > best_value {
 			best_value = result[0]
 			best_move = possible_moves[result[1]]
 		}
+		if best_value >= 300 {
+			// good enough move found
+			// goroutines will finish in the background but we don't care about the results
+			return best_move
+		}
 	}
-	close(results)
 	return best_move
 }
 
 func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
 	state := game.State
-	if state == BLACK_WON {
+	switch state {
+	case BLACK_WON:
 		if my_turn == BLACK_TURN {
 			return 300
 		} else {
 			return -300
 		}
-	} else if state == WHITE_WON {
+	case WHITE_WON:
 		if my_turn == WHITE_TURN {
 			return 300
 		} else {
 			return -300
 		}
-	} else if state == DRAW {
+	case DRAW:
 		return 0
 	}
-	// if depth is 0, return heuristic Board evaluation
 	if depth <= 0 {
 		return evaluate_board(game.Board, my_turn)
 	}
 
-	possible_moves := game.GetValidMoves()
 	var best_value int
 	if state == my_turn {
 		best_value = math.MinInt32
 	} else {
 		best_value = math.MaxInt32
 	}
+	possible_moves := game.GetValidMoves()
 	for _, move := range possible_moves {
 		simulation := game.Copy()
 		simulation.MakeMove(move)
 		value := minimax(simulation, my_turn, depth-1, alpha, beta)
-		// alpha-beta pruning
+
 		if state == my_turn {
 			best_value = max(best_value, value)
 			alpha = max(best_value, alpha)
@@ -95,7 +99,7 @@ func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
 			beta = min(best_value, beta)
 		}
 		if alpha >= beta {
-			break
+			break // prune
 		}
 	}
 	return best_value
@@ -116,14 +120,14 @@ func evaluate_board(game_board [8][8]Cell, my_turn State) int {
 	score := 0
 	for y := 0; y < 8; y++ {
 		for x := 0; x < 8; x++ {
-			cell := game_board[y][x]
-			if cell == BLACK {
+			switch game_board[y][x] {
+			case BLACK:
 				if my_turn == BLACK_TURN {
 					score += REWARDS[y][x]
 				} else {
 					score -= REWARDS[y][x]
 				}
-			} else if cell == WHITE {
+			case WHITE:
 				if my_turn == WHITE_TURN {
 					score += REWARDS[y][x]
 				} else {
