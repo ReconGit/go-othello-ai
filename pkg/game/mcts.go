@@ -17,9 +17,9 @@ func MctsMove(game Othello, iterations int) [2]int {
 			simulation.MakeMove(node.position)
 		}
 		// EXPAND
-		unexplored_len := len(node.unexplored)
-		if unexplored_len > 0 {
-			rand_idx := rand.Intn(unexplored_len)
+		num_unexplored := len(node.unexplored)
+		if num_unexplored > 0 {
+			rand_idx := rand.Intn(num_unexplored)
 			explored_move := node.unexplored[rand_idx]
 			explored_turn := simulation.State
 			simulation.MakeMove(explored_move)

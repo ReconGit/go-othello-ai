@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"runtime"
 	"time"
 
 	"github.com/ReconGit/go-othello-ai/pkg/game"
@@ -10,7 +11,7 @@ import (
 
 const (
 	GAMES           = 100
-	MINIMAX_DEPTH   = 1
+	MINIMAX_DEPTH   = 2
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"
@@ -71,7 +72,7 @@ func benchmark_game(
 
 	start := time.Now()
 	for i := 0; i < GAMES; i++ {
-		fmt.Printf("  game: %d/%d, elapsed time: %.2fs\r", i+1, GAMES, time.Since(start).Seconds())
+		fmt.Printf("  game: %d/%d, time: %.2fs, gr: %d      \r", i+1, GAMES, time.Since(start).Seconds(), runtime.NumGoroutine())
 
 		othello := game.NewOthello()
 		for othello.State == game.BLACK_TURN || othello.State == game.WHITE_TURN {
@@ -92,9 +93,9 @@ func benchmark_game(
 		}
 	}
 	fmt.Printf("  elapsed time: %.2fs                     \n", time.Since(start).Seconds())
-	fmt.Printf("    BLACK wins: %d %.1f%%\n", black_wins, (float32(black_wins)/float32(GAMES))*100)
-	fmt.Printf("    WHITE wins: %d %.1f%%\n", white_wins, (float32(white_wins)/float32(GAMES))*100)
-	fmt.Printf("         Draws: %d %.1f%%\n", draws, (float32(draws)/float32(GAMES))*100)
+	fmt.Printf("    BLACK wins: %d %.0f%%\n", black_wins, (float32(black_wins)/float32(GAMES))*100)
+	fmt.Printf("    WHITE wins: %d %.0f%%\n", white_wins, (float32(white_wins)/float32(GAMES))*100)
+	fmt.Printf("         Draws: %d %.0f%%\n", draws, (float32(draws)/float32(GAMES))*100)
 }
 
 func random_move(game game.Othello, _dummy_iterations int) [2]int {
