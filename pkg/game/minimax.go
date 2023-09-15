@@ -33,14 +33,14 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	best_value := math.MinInt32
 	result_chan := make(chan [2]int)
 
-	for i, move := range possible_moves {
+	for i := range possible_moves {
 		// parallelize each move in a goroutine to speed up the search
-		go func(move [2]int, move_idx int) {
+		go func(move_idx int) {
 			simulation := game.Copy()
-			simulation.MakeMove(move)
+			simulation.MakeMove(possible_moves[move_idx])
 			value := minimax(simulation, my_turn, depth-1, math.MinInt32, math.MaxInt32)
 			result_chan <- [2]int{value, move_idx}
-		}(move, i)
+		}(i)
 	}
 	for i := 0; i < len(possible_moves); i++ {
 		result := <-result_chan
@@ -51,7 +51,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 		if best_value >= 300 {
 			// good enough move found
 			// goroutines will finish in the background but we don't care about the results
-			return best_move
+			break
 		}
 	}
 	return best_move
@@ -86,9 +86,9 @@ func minimax(game Othello, my_turn State, depth, alpha, beta int) int {
 		best_value = math.MaxInt32
 	}
 	possible_moves := game.GetValidMoves()
-	for _, move := range possible_moves {
+	for i := range possible_moves {
 		simulation := game.Copy()
-		simulation.MakeMove(move)
+		simulation.MakeMove(possible_moves[i])
 		value := minimax(simulation, my_turn, depth-1, alpha, beta)
 
 		if state == my_turn {

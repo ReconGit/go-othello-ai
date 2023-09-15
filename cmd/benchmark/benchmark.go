@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/ReconGit/go-othello-ai/pkg/game"
 	"math/rand"
 	"time"
+
+	"github.com/ReconGit/go-othello-ai/pkg/game"
 )
 
 const (
 	GAMES           = 100
-	MINIMAX_DEPTH   = 2
+	MINIMAX_DEPTH   = 1
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"
