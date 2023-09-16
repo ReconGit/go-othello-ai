@@ -26,9 +26,7 @@ type Othello struct {
 	WhiteScore int
 }
 
-// NewOthello returns a new Othello game
 func NewOthello() Othello {
-	// initialize board
 	board := [8][8]Cell{}
 	board[3][3] = WHITE
 	board[3][4] = BLACK
@@ -47,7 +45,6 @@ func NewOthello() Othello {
 	}
 }
 
-// Copy returns a copy of the game
 func (o *Othello) Copy() Othello {
 	board := [8][8]Cell{}
 	for y := 0; y < 8; y++ {
@@ -63,16 +60,14 @@ func (o *Othello) Copy() Othello {
 	}
 }
 
-// MakeMove makes a move on the board
+// MakeMove makes a move on the board and updates the game state.
 func (o *Othello) MakeMove(position [2]int) {
-	// sanity checks
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		panic("Cannot make move because the game is over.")
 	}
 	if o.Board[position[1]][position[0]] != VALID {
 		panic("Position is not valid.")
 	}
-	// update board
 	var reverse Cell
 	if o.State == BLACK_TURN {
 		reverse = BLACK
@@ -86,7 +81,7 @@ func (o *Othello) MakeMove(position [2]int) {
 	o.update_state()
 }
 
-// GetValidMoves returns a list of positions that can be played
+// GetValidMoves returns a list of positions that can be played.
 func (o *Othello) GetValidMoves() [][2]int {
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		return [][2]int{}
@@ -118,22 +113,19 @@ func (o *Othello) update_state() {
 		o.decide_winner()
 		return
 	}
-	// switch turn
 	if o.State == BLACK_TURN {
 		o.State = WHITE_TURN
 	} else {
 		o.State = BLACK_TURN
 	}
-	// update valid cells
 	o.update_valid_cells()
+	// if the next player has no valid moves, skip their turn
 	if len(o.GetValidMoves()) == 0 {
-		// switch turn again
 		if o.State == BLACK_TURN {
 			o.State = WHITE_TURN
 		} else {
 			o.State = BLACK_TURN
 		}
-		// update valid cells again
 		o.update_valid_cells()
 		if len(o.GetValidMoves()) == 0 {
 			o.decide_winner()

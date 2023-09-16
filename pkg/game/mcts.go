@@ -5,7 +5,7 @@ import (
 	"math/rand"
 )
 
-// MctsMove returns the best move for the given game state using Monte Carlo Tree Search
+// MctsMove returns the best move for the given game state using Monte Carlo Tree Search.
 func MctsMove(game Othello, iterations int) [2]int {
 	root := new_node(nil, [2]int{}, game.State, game.GetValidMoves())
 	for i := 0; i < iterations; i++ {
@@ -72,7 +72,6 @@ func new_node(parent *Node, position [2]int, turn State, unexplored [][2]int) *N
 	}
 }
 
-// select_child returns the child node with the highest UCT value
 func (n *Node) select_child() *Node {
 	best_child_idx := 0
 	best_uct := math.Inf(-1)
@@ -87,7 +86,6 @@ func (n *Node) select_child() *Node {
 	return n.children[best_child_idx]
 }
 
-// get_most_visited_position returns the position of the child node with the most visits
 func (n *Node) get_most_visited_position() [2]int {
 	most_visited_child_idx := 0
 	most_visits := 0

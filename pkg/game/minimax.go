@@ -5,23 +5,20 @@ import (
 	"math/rand"
 )
 
-// MinimaxMove returns the best move for the given game state using Minimax with alpha-beta pruning
+// MinimaxMove returns the best move for the given game state using Minimax with alpha-beta pruning.
 func MinimaxMove(game Othello, depth int) [2]int {
 	possible_moves := game.GetValidMoves()
 	num_possible_moves := len(possible_moves)
 	if num_possible_moves == 0 {
 		panic("Minimax: No valid moves!")
 	}
-	// if only one move, return it
 	if num_possible_moves == 1 {
 		return possible_moves[0]
 	}
-	// if round is less than 3, return random move
 	round := get_round(game.Board)
 	if round < 3 {
 		return possible_moves[rand.Intn(num_possible_moves)]
 	}
-	// increase depth based on round
 	if round >= 50 {
 		depth += 10 // end game solver
 	} else if round > 40 {

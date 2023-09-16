@@ -52,7 +52,6 @@ func user_move(game Othello) [2]int {
 		}
 		x := int(input[0]) - 65
 		y := int(input[1]) - 49
-		// if the move is in valid move list, return it
 		for _, move := range game.GetValidMoves() {
 			if move[0] == x && move[1] == y {
 				return [2]int{x, y}
