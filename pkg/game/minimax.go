@@ -148,17 +148,3 @@ func get_round(game_board [8][8]Cell) int {
 	}
 	return round
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
