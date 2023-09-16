@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"runtime"
 	"time"
 
 	"github.com/ReconGit/go-othello-ai/pkg/game"
@@ -11,7 +10,7 @@ import (
 
 const (
 	GAMES           = 100
-	MINIMAX_DEPTH   = 2
+	MINIMAX_DEPTH   = 3
 	MCTS_ITERATIONS = 100
 
 	MAGENTA_ANSI = "\x1b[35m"
@@ -72,7 +71,7 @@ func benchmark_game(
 
 	start := time.Now()
 	for i := 0; i < GAMES; i++ {
-		fmt.Printf("  game: %d/%d, time: %.2fs, gr: %d      \r", i+1, GAMES, time.Since(start).Seconds(), runtime.NumGoroutine())
+		fmt.Printf("  game: %d/%d, elapsed time: %.2fs\r", i+1, GAMES, time.Since(start).Seconds())
 
 		othello := game.NewOthello()
 		for othello.State == game.BLACK_TURN || othello.State == game.WHITE_TURN {
