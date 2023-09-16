@@ -45,7 +45,7 @@ func NewOthello() Othello {
 	}
 }
 
-func (o *Othello) Copy() Othello {
+func (o *Othello) DeepCopy() Othello {
 	board := [8][8]Cell{}
 	for y := 0; y < 8; y++ {
 		for x := 0; x < 8; x++ {

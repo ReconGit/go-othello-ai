@@ -10,7 +10,7 @@ func MctsMove(game Othello, iterations int) [2]int {
 	root := new_node(nil, [2]int{}, game.State, game.GetValidMoves())
 	for i := 0; i < iterations; i++ {
 		node := root
-		simulation := game.Copy()
+		simulation := game.DeepCopy()
 		// SELECT
 		for len(node.unexplored) == 0 && len(node.children) > 0 {
 			node = node.select_child()
