@@ -2,6 +2,8 @@ package game
 
 import (
 	"fmt"
+	"os"
+	"unicode"
 )
 
 const (
@@ -44,13 +46,17 @@ func PlayGame() {
 func user_move(game Othello) [2]int {
 	var input string
 	for {
-		fmt.Printf("Enter move (eg. A1): ")
+		fmt.Printf("Enter move (eg. A1/a1): ")
 		_, err := fmt.Scanln(&input)
-		if err != nil || len(input) != 2 {
+		if err != nil || len(input) != 2 && input[0] != 'q' {
 			fmt.Printf("%sInvalid input.%s\n", RED_ANSI, RESET_ANSI)
 			continue
 		}
-		x := int(input[0]) - 65
+		if input[0] == 'q' {
+			fmt.Println("\nGame quit.")
+			os.Exit(0)
+		}
+		x := int(unicode.ToUpper(rune(input[0]))) - 65
 		y := int(input[1]) - 49
 		for _, move := range game.GetValidMoves() {
 			if move[0] == x && move[1] == y {
