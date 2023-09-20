@@ -68,6 +68,7 @@ func (o *Othello) MakeMove(position [2]int) {
 	if o.Board[position[1]][position[0]] != VALID {
 		panic("Position is not valid.")
 	}
+
 	var reverse Cell
 	if o.State == BLACK_TURN {
 		reverse = BLACK
@@ -86,6 +87,7 @@ func (o *Othello) GetValidMoves() [][2]int {
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
 		return [][2]int{}
 	}
+
 	valid_moves := [][2]int{}
 	for y := 0; y < 8; y++ {
 		for x := 0; x < 8; x++ {
@@ -113,6 +115,7 @@ func (o *Othello) update_state() {
 		o.decide_winner()
 		return
 	}
+	
 	if o.State == BLACK_TURN {
 		o.State = WHITE_TURN
 	} else {

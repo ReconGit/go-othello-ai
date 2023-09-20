@@ -9,6 +9,7 @@ import (
 func MinimaxMove(game Othello, depth int) [2]int {
 	possible_moves := game.GetValidMoves()
 	possible_moves_len := len(possible_moves)
+	
 	if possible_moves_len == 0 {
 		panic("Minimax: No valid moves!")
 	}
@@ -19,6 +20,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	if round < 3 {
 		return possible_moves[rand.Intn(possible_moves_len)]
 	}
+
 	if round >= 50 {
 		depth += 10 // end game solver
 	} else if round > 40 {
