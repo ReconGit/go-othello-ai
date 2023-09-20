@@ -8,16 +8,16 @@ import (
 // MinimaxMove returns the best move for the given game state using Minimax with alpha-beta pruning.
 func MinimaxMove(game Othello, depth int) [2]int {
 	possible_moves := game.GetValidMoves()
-	num_possible_moves := len(possible_moves)
-	if num_possible_moves == 0 {
+	possible_moves_len := len(possible_moves)
+	if possible_moves_len == 0 {
 		panic("Minimax: No valid moves!")
 	}
-	if num_possible_moves == 1 {
+	if possible_moves_len == 1 {
 		return possible_moves[0]
 	}
 	round := get_round(game.Board)
 	if round < 3 {
-		return possible_moves[rand.Intn(num_possible_moves)]
+		return possible_moves[rand.Intn(possible_moves_len)]
 	}
 	if round >= 50 {
 		depth += 10 // end game solver
@@ -29,7 +29,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	my_turn := game.State
 	best_move := possible_moves[0]
 	best_value := math.MinInt32
-	result_chan := make(chan [2]int, num_possible_moves)
+	result_chan := make(chan [2]int, possible_moves_len)
 
 	for i := range possible_moves {
 		// parallelize each move in a goroutine to speed up the search
@@ -40,7 +40,7 @@ func MinimaxMove(game Othello, depth int) [2]int {
 			result_chan <- [2]int{value, move_idx}
 		}(i)
 	}
-	for i := 0; i < num_possible_moves; i++ {
+	for i := 0; i < possible_moves_len; i++ {
 		result := <-result_chan
 		if result[0] > best_value {
 			best_value = result[0]
