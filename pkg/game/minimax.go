@@ -19,7 +19,6 @@ func MinimaxMove(game Othello, depth int) [2]int {
 	if round < 3 {
 		return possible_moves[rand.Intn(possible_moves_len)]
 	}
-
 	if round >= 50 {
 		depth += 10 // end game solver
 	} else if round > 40 {
