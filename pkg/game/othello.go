@@ -115,7 +115,7 @@ func (o *Othello) update_state() {
 		o.decide_winner()
 		return
 	}
-	
+
 	if o.State == BLACK_TURN {
 		o.State = WHITE_TURN
 	} else {

@@ -8,7 +8,7 @@ import (
 // MctsMove returns the best move for the given game state using Monte Carlo Tree Search.
 func MctsMove(game Othello, iterations int) [2]int {
 	root := new_node(nil, [2]int{}, game.State, game.GetValidMoves())
-	
+
 	for i := 0; i < iterations; i++ {
 		node := root
 		simulation := game.DeepCopy()
