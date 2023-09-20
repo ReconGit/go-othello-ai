@@ -9,7 +9,6 @@ import (
 func MinimaxMove(game Othello, depth int) [2]int {
 	possible_moves := game.GetValidMoves()
 	possible_moves_len := len(possible_moves)
-	
 	if possible_moves_len == 0 {
 		panic("Minimax: No valid moves!")
 	}
