@@ -63,10 +63,10 @@ func (o *Othello) DeepCopy() Othello {
 // MakeMove makes a move on the board and updates the game state.
 func (o *Othello) MakeMove(position [2]int) {
 	if o.State != BLACK_TURN && o.State != WHITE_TURN {
-		panic("Cannot make move because the game is over.")
+		panic("Can't make move: Game is over")
 	}
 	if o.Board[position[1]][position[0]] != VALID {
-		panic("Position is not valid.")
+		panic("Can't make move: Position invalid" + string(rune(o.Board[position[1]][position[0]])))
 	}
 
 	var reverse Cell
