@@ -76,10 +76,10 @@ func (n *Node) select_child() *Node {
 	best_child_idx := 0
 	best_uct := math.Inf(-1)
 	ln_total := math.Log(2 * float64(n.visits))
-	for child_idx, child := range n.children {
+	for i, child := range n.children {
 		uct := float64(child.wins)/float64(child.visits) + math.Sqrt(ln_total/float64(child.visits))
 		if uct > best_uct {
-			best_child_idx = child_idx
+			best_child_idx = i
 			best_uct = uct
 		}
 	}
@@ -87,13 +87,13 @@ func (n *Node) select_child() *Node {
 }
 
 func (n *Node) get_most_visited_position() [2]int {
-	most_visited_child_idx := 0
+	most_visited_idx := 0
 	most_visits := 0
 	for i, child := range n.children {
 		if child.visits > most_visits {
-			most_visited_child_idx = i
+			most_visited_idx = i
 			most_visits = child.visits
 		}
 	}
-	return n.children[most_visited_child_idx].position
+	return n.children[most_visited_idx].position
 }
